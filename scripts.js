@@ -56,7 +56,7 @@ function oldstaging(T, N, M) {
   || (T == 'T4' && N == 'N2' && M == 'M0')) {
     return 'IIIB';
   }
-  else if ((N == 'N3' && M == 'M0')) {
+  else if (N == 'N3' && M == 'M0') {
     return 'IIIC';
   }
   else if (M == 'M1') {
