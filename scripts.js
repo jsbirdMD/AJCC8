@@ -17,12 +17,13 @@ function UpdateStage() {
     else if (func == 'pathological') {
       update = pathological(Tu, No, Me, Gr, He2, EsR, PrR, Odx);
     }
-    
+
     document.getElementById("results").innerHTML = "The stage is " + update;
 }
 
 function clinical(T, N, M, G, H2, ER, PR) {
-  if (T == 'Tis' && N == 'N0' && M == 'M0') {
+  if ((T == 'Tis' && N == 'N0' && M == 'M0')
+  || (T == 'T0' && N == 'N0' && M == 'M0')) {
     return '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0')
@@ -143,6 +144,7 @@ function clinical(T, N, M, G, H2, ER, PR) {
   }
 }
 
+/*
 console.log(clinical('Tis', 'N0', 'M0', '1', '+','+','+'));
 
 console.log(clinical('T1', 'N0', 'M0', '3', '-','+','-'));
@@ -176,7 +178,6 @@ console.log(clinical('T0', 'N0', 'M1', '3', '+','-','-'));
 console.log(clinical('T3', 'N1mi', 'M1', '2', '-','+','-'));
 console.log(clinical('T4', 'N2', 'M1', '1', '+','+','+'));
 
-/*
 0
 
 IB
@@ -212,7 +213,8 @@ IV
 */
 
 function pathological(T, N, M, G, H2, ER, PR, Odx) {
-  if (T == 'Tis' && N == 'N0' && M == 'M0') {
+  if ((T == 'Tis' && N == 'N0' && M == 'M0')
+  || (T == 'T0' && N == 'N0' && M == 'M0')) {
     return '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0' && H2 == '-' && ER == '+' && Odx == '+')
@@ -332,6 +334,7 @@ function pathological(T, N, M, G, H2, ER, PR, Odx) {
   }
 }
 
+/*
 console.log(pathological('Tis', 'N0', 'M0', '1', '+','+','+','+'));
 
 console.log(pathological('T1', 'N0', 'M0', '3', '-','-','-','-'));
@@ -367,7 +370,8 @@ console.log(pathological('T4', 'N2', 'M1', '1', '+','+','+','+'));
 
 console.log(pathological('T1', 'N0', 'M0', '3', '-','+','+','+'));
 console.log(pathological('T2', 'N0', 'M0', '1', '-','+','-','+'));
-/*
+
+
 0
 
 IB

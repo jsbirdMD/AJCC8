@@ -14,15 +14,14 @@ h2 {
     font-size: 20px;
 }
 
-#stageid {
-  text-align: center;
-}
-
 button {
   margin: auto;
   display: block;
 }
 
+#stageid {
+  text-align: center;
+}
 
 /* Create two equal columns that floats next to each other */
 .column {
