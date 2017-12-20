@@ -11,7 +11,8 @@ function UpdateStage() {
     var PrR = document.querySelector('input[name="PR"]:checked').value;
     var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 
-    if (func == 'clinical' && (Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0')) {
+    if (Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0') {
+      func = 'clinical';
       update = oldstaging(Tu, No, Me);
     }
     else if (func == 'clinical'){
