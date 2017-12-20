@@ -1,0 +1,51 @@
+* {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+body {
+    margin: 5px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+#stageid {
+  text-align: center;
+}
+
+button {
+  margin: auto;
+  display: block;
+}
+
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
