@@ -11,7 +11,7 @@ function UpdateStage() {
     var PrR = document.querySelector('input[name="PR"]:checked').value;
     var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 
-    if (func == 'clinical' && Gr == '0' && He2 == '0' && EsR == '0' && PrR == '0') {
+    if (func == 'clinical' && (Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0')) {
       update = oldstaging(Tu, No, Me);
     }
     else if (func == 'clinical'){
@@ -21,11 +21,12 @@ function UpdateStage() {
       update = pathological(Tu, No, Me, Gr, He2, EsR, PrR, Odx);
     }
 
-    document.getElementById("results").innerHTML = "The" + func + "stage is"+ update;
+    document.getElementById("results").innerHTML = "The " + func + " prognostic stage is "+ update;
 }
 
 function oldstaging(T, N, M) {
-  if ((T == 'Tis' && N == 'N0' && M == 'M0')) {
+  if ((T == 'Tis' && N == 'N0' && M == 'M0')
+  ||(T == 'T0' && N == 'N0' && M == 'M0')) {
     return '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0')) {
@@ -40,18 +41,21 @@ function oldstaging(T, N, M) {
   || (T == 'T2' && N == 'N0' && M == 'M0')) {
     return 'IIA';
   }
-  else if ((T == 'T2' && N == 'N1' && M == 'M0')
+  else if ((T == 'T2' && N == 'N1mi' && M == 'M0')
+  || (T == 'T2' && N == 'N1' && M == 'M0')
   || (T == 'T3' && N == 'N0' && M == 'M0')) {
     return 'IIB';
   }
   else if ((T == 'T0' && N == 'N2' && M == 'M0')
   || (T == 'T1' && N == 'N2' && M == 'M0')
   || (T == 'T2' && N == 'N2' && M == 'M0')
+  || (T == 'T3' && N == 'N1mi' && M == 'M0')
   || (T == 'T3' && N == 'N1' && M == 'M0')
   || (T == 'T3' && N == 'N2' && M == 'M0')) {
     return 'IIIA';
   }
   else if ((T == 'T4' && N == 'N0' && M == 'M0')
+  || (T == 'T4' && N == 'N1mi' && M == 'M0')
   || (T == 'T4' && N == 'N1' && M == 'M0')
   || (T == 'T4' && N == 'N2' && M == 'M0')) {
     return 'IIIB';
