@@ -1,3 +1,5 @@
+
+//Updates the staging based off radio labels pressed
 function UpdateStage() {
     var update = ""
     var func = document.querySelector('input[name="CLorP"]:checked').value;
@@ -25,6 +27,29 @@ function UpdateStage() {
     document.getElementById("results").innerHTML = "The " + func + " prognostic stage is "+ update;
 }
 
+function revealOncDx() {
+    document.getElementById("results").innerHTML = ""
+    var oncrev = document.getElementById("hidden");
+    var func = document.querySelector('input[name="CLorP"]:checked').value;
+    var T = document.querySelector('input[name="Tumor"]:checked').value;
+    var N = document.querySelector('input[name="Node"]:checked').value;
+    var M = document.querySelector('input[name="Metastasis"]:checked').value;
+
+    if ((func == 'pathological' && T == 'T1' && N == 'N0' && M == 'M0')
+    ||(func == 'pathological' && T == 'T2' && N == 'N0' && M == 'M0')) {
+
+      if (oncrev.style.display === "none") {
+          oncrev.style.display = "block";
+      }
+    }
+    else {
+      oncrev.style.display = "none";
+      document.getElementById("oncchecked").checked = true;
+    }
+    var Odx = document.querySelector('input[name="OncDx"]:checked').value;
+}
+
+//function for the older staging (before HER2 and ER were added)
 function oldstaging(T, N, M) {
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
   ||(T == 'T0' && N == 'N0' && M == 'M0')) {
@@ -72,6 +97,7 @@ function oldstaging(T, N, M) {
   }
 }
 
+// clinical function for staging
 function clinical(T, N, M, G, H2, ER, PR) {
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
   || (T == 'T0' && N == 'N0' && M == 'M0')) {
@@ -263,6 +289,7 @@ IV
 IV
 */
 
+// pathological function for staging
 function pathological(T, N, M, G, H2, ER, PR, Odx) {
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
   || (T == 'T0' && N == 'N0' && M == 'M0')) {
