@@ -10,7 +10,7 @@
 
 <div id = "stageid">
   <h2> Staging </h2>
-  <label class="checked"><input type="radio" name="CLorP" value = 'clinical' onclick = "revealOncDx();" checked /> Clinical</label>
+  <label class="checked"><input type="radio" name="CLorP" value = 'clinical' onclick = "clearResults();" checked /> Clinical</label>
   <label><input type="radio" name="CLorP" value = 'pathological' onclick = "revealOncDx();" /> Pathological</label>
 </div>
 
@@ -18,53 +18,53 @@
   <div class="column">
 
       <h2> Tumor </h2>
-      <label class="checked"><input type="radio" name="Tumor" value = 'T0' onclick = "revealOncDx();" checked /> T0</label>
-      <label><input type="radio" name="Tumor" value = 'Tis' onclick = "revealOncDx();" /> Tis</label>
+      <label class="checked"><input type="radio" name="Tumor" value = 'T0' onclick = "clearResults();" checked /> T0</label>
+      <label><input type="radio" name="Tumor" value = 'Tis' onclick = "clearResults();" /> Tis</label>
       <label><input type="radio" name="Tumor" value = 'T1' onclick = "revealOncDx();" /> T1</label>
       <label><input type="radio" name="Tumor" value = 'T2' onclick = "revealOncDx();" /> T2</label>
-      <label><input type="radio" name="Tumor" value = 'T3' onclick = "revealOncDx();" /> T3</label>
-      <label><input type="radio" name="Tumor" value = 'T4' onclick = "revealOncDx();" /> T4</label>
+      <label><input type="radio" name="Tumor" value = 'T3' onclick = "clearResults();" /> T3</label>
+      <label><input type="radio" name="Tumor" value = 'T4' onclick = "clearResults();" /> T4</label>
 
       <h2> Nodes </h2>
       <label class="checked"><input type="radio" name="Node" value = 'N0' onclick = "revealOncDx();" checked /> N0</label>
-      <label><input type="radio" name="Node" value = 'N1mi' onclick = "revealOncDx();" /> N1mi</label>
-      <label><input type="radio" name="Node" value = 'N1' onclick = "revealOncDx();" /> N1</label>
-      <label><input type="radio" name="Node" value = 'N2' onclick = "revealOncDx();" /> N2</label>
-      <label><input type="radio" name="Node" value = 'N3' onclick = "revealOncDx();" /> N3</label>
+      <label><input type="radio" name="Node" value = 'N1mi' onclick = "clearResults();" /> N1mi</label>
+      <label><input type="radio" name="Node" value = 'N1' onclick = "clearResults();" /> N1</label>
+      <label><input type="radio" name="Node" value = 'N2' onclick = "clearResults();" /> N2</label>
+      <label><input type="radio" name="Node" value = 'N3' onclick = "clearResults();" /> N3</label>
 
       <h2> Metastasis </h2>
       <label class="checked"><input type="radio" name="Metastasis" value = 'M0' onclick = "revealOncDx();" checked /> M0</label>
-      <label><input type="radio" name="Metastasis" value = 'M1' onclick = "revealOncDx();" /> M1</label>
+      <label><input type="radio" name="Metastasis" value = 'M1' onclick = "clearResults();" /> M1</label>
 
       <h2> Grade </h2>
-      <label class="checked"><input type="radio" name="Grade" value = '0' onclick = "revealOncDx();" checked/> None</label>
-      <label><input type="radio" name="Grade" value = '1' onclick = "revealOncDx();"/> 1</label>
-      <label><input type="radio" name="Grade" value = '2' onclick = "revealOncDx();" /> 2</label>
-      <label><input type="radio" name="Grade" value = '3' onclick = "revealOncDx();" /> 3</label>
+      <label class="checked"><input type="radio" name="Grade" value = '0' onclick = "clearResults();" checked/> None</label>
+      <label><input type="radio" name="Grade" value = '1' onclick = "clearResults();"/> 1</label>
+      <label><input type="radio" name="Grade" value = '2' onclick = "clearResults();" /> 2</label>
+      <label><input type="radio" name="Grade" value = '3' onclick = "clearResults();" /> 3</label>
   </div>
 
   <div class="column">
 
       <h2> Her2 </h2>
-      <label class="checked"><input type="radio" name="Her2" value = '0' onclick = "revealOncDx();" checked/> None</label>
+      <label class="checked"><input type="radio" name="Her2" value = '0' onclick = "clearResults();" checked/> None</label>
       <label><input type="radio" name="Her2" value = '-' onclick = "revealOncDx();" /> -</label>
-      <label><input type="radio" name="Her2" value = '+' onclick = "revealOncDx();" /> +</label>
+      <label><input type="radio" name="Her2" value = '+' onclick = "clearResults();" /> +</label>
 
       <h2> ER </h2>
-      <label class="checked"><input type="radio" name="ER" value = '0' onclick = "revealOncDx();" checked/> None</label>
-      <label><input type="radio" name="ER" value = '-' onclick = "revealOncDx();" /> -</label>
+      <label class="checked"><input type="radio" name="ER" value = '0' onclick = "clearResults();" checked/> None</label>
+      <label><input type="radio" name="ER" value = '-' onclick = "clearResults();" /> -</label>
       <label><input type="radio" name="ER" value = '+' onclick = "revealOncDx();" /> +</label>
 
       <h2> PR </h2>
-      <label class="checked"><input type="radio" name="PR" value = '0' onclick = "revealOncDx();" checked/> None</label>
-      <label><input type="radio" name="PR" value = '-' onclick = "revealOncDx();" /> -</label>
-      <label><input type="radio" name="PR" value = '+' onclick = "revealOncDx();" /> +</label>
+      <label class="checked"><input type="radio" name="PR" value = '0' onclick = "clearResults();" checked/> None</label>
+      <label><input type="radio" name="PR" value = '-' onclick = "clearResults();" /> -</label>
+      <label><input type="radio" name="PR" value = '+' onclick = "clearResults();" /> +</label>
 
     <div id="hidden" style="display: none;">
       <h2> Oncotype Dx </h2>
-      <label class="checked"><input type="radio" id ="oncchecked" name="OncDx" value = '0' onclick = "revealOncDx();" checked/> None</label>
-      <label><input type="radio" name="OncDx" value = '+' onclick = "revealOncDx();" /> <11</label>
-      <label><input type="radio" name="OncDx" value = '-' onclick = "revealOncDx();" /> >=11</label>
+      <label class="checked"><input type="radio" id ="oncchecked" name="OncDx" value = '0' onclick = "clearResults();" checked/> None</label>
+      <label><input type="radio" name="OncDx" value = '+' onclick = "clearResults();" /> <11</label>
+      <label><input type="radio" name="OncDx" value = '-' onclick = "clearResults();" /> >=11</label>
     </div>
   </div>
 </div>

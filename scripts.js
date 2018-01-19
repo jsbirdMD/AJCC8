@@ -14,7 +14,7 @@ function UpdateStage() {
     var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 
     if (Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0') {
-      func = 'clinical';
+      func = 'AJCC7';
       update = oldstaging(Tu, No, Me);
     }
     else if (func == 'clinical'){
@@ -34,9 +34,11 @@ function revealOncDx() {
     var T = document.querySelector('input[name="Tumor"]:checked').value;
     var N = document.querySelector('input[name="Node"]:checked').value;
     var M = document.querySelector('input[name="Metastasis"]:checked').value;
+    var He2 = document.querySelector('input[name="Her2"]:checked').value;
+    var EsR = document.querySelector('input[name="ER"]:checked').value;
 
-    if ((func == 'pathological' && T == 'T1' && N == 'N0' && M == 'M0')
-    ||(func == 'pathological' && T == 'T2' && N == 'N0' && M == 'M0')) {
+    if ((func == 'pathological' && T == 'T1' && N == 'N0' && M == 'M0' && He2 == '-' && EsR =='+')
+    ||(func == 'pathological' && T == 'T2' && N == 'N0' && M == 'M0' && He2 == '-' && EsR =='+')) {
 
       if (oncrev.style.display === "none") {
           oncrev.style.display = "block";
@@ -46,7 +48,13 @@ function revealOncDx() {
       oncrev.style.display = "none";
       document.getElementById("oncchecked").checked = true;
     }
-    var Odx = document.querySelector('input[name="OncDx"]:checked').value;
+    //var Odx = document.querySelector('input[name="OncDx"]:checked').value;
+}
+
+function clearResults() {
+    document.getElementById("results").innerHTML = "";
+    document.getElementById("hidden").style.display = "none";
+    document.getElementById("oncchecked").checked = true;
 }
 
 //function for the older staging (before HER2 and ER were added)
