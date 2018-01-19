@@ -51,12 +51,6 @@ function revealOncDx() {
     //var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 }
 
-function clearResults() {
-    document.getElementById("results").innerHTML = "";
-    document.getElementById("hidden").style.display = "none";
-    document.getElementById("oncchecked").checked = true;
-}
-
 //function for the older staging (before HER2 and ER were added)
 function oldstaging(T, N, M) {
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
