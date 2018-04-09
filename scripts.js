@@ -13,9 +13,11 @@ function UpdateStage() {
     var PrR = document.querySelector('input[name="PR"]:checked').value;
     var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 
-    if (Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0') {
-      func = 'AJCC7';
-      update = oldstaging(Tu, No, Me);
+    if ((Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0')
+    && (Tu != 'Tis' || No != 'N0' || Me != 'M0')
+    && (Me != 'M1')) {
+      func = 'anatomical';
+      update = anatomical(Tu, No, Me);
     }
     else if (func == 'clinical'){
       update = clinical(Tu, No, Me, Gr, He2, EsR, PrR);
@@ -27,6 +29,8 @@ function UpdateStage() {
     document.getElementById("results").innerHTML = "The " + func + " prognostic stage is "+ update;
 }
 
+// Only reveal OncDX tab when appropriate
+// (Path, T1N0M0 or T2N0M0, Her2 -, Er +)
 function revealOncDx() {
     document.getElementById("results").innerHTML = ""
     var oncrev = document.getElementById("hidden");
@@ -51,8 +55,9 @@ function revealOncDx() {
     //var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 }
 
-//function for the older staging (before HER2 and ER were added)
-function oldstaging(T, N, M) {
+//function for the anatomical function for staging
+//(when grade, ER, PR, or Her2 aren't available)
+function anatomical(T, N, M) {
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
   ||(T == 'T0' && N == 'N0' && M == 'M0')) {
     return '0';
