@@ -1,7 +1,7 @@
 
 //Updates the staging based off radio labels pressed
 function UpdateStage() {
-    var update = ""
+    var stage = ""
     var func = document.querySelector('input[name="CLorP"]:checked').value;
 
     var Tu = document.querySelector('input[name="Tumor"]:checked').value;
@@ -13,20 +13,14 @@ function UpdateStage() {
     var PrR = document.querySelector('input[name="PR"]:checked').value;
     var Odx = document.querySelector('input[name="OncDx"]:checked').value;
 
-    if ((Gr == '0' || He2 == '0' || EsR == '0' || PrR == '0')
-    && (Tu != 'Tis' || No != 'N0' || Me != 'M0')
-    && (Me != 'M1')) {
-      func = 'anatomical';
-      update = anatomical(Tu, No, Me);
-    }
-    else if (func == 'clinical'){
-      update = clinical(Tu, No, Me, Gr, He2, EsR, PrR);
+    if (func == 'clinical'){
+      [func, stage] = clinical(Tu, No, Me, Gr, He2, EsR, PrR);
     }
     else if (func == 'pathological') {
-      update = pathological(Tu, No, Me, Gr, He2, EsR, PrR, Odx);
+      [func, stage] = pathological(Tu, No, Me, Gr, He2, EsR, PrR, Odx);
     }
 
-    document.getElementById("results").innerHTML = "The " + func + " prognostic stage is "+ update;
+    document.getElementById("results").innerHTML = "The " + func + " stage is "+ stage;
 }
 
 // Only reveal OncDX tab when appropriate
@@ -58,26 +52,28 @@ function revealOncDx() {
 //function for the anatomical function for staging
 //(when grade, ER, PR, or Her2 aren't available)
 function anatomical(T, N, M) {
+  var func = 'anatomical';
+  var stage = 'error';
   if ((T == 'Tis' && N == 'N0' && M == 'M0')
   ||(T == 'T0' && N == 'N0' && M == 'M0')) {
-    return '0';
+    stage = '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0')) {
-    return 'IA';
+    stage = 'IA';
   }
   else if ((T == 'T0' && N == 'N1mi' && M == 'M0')
   || (T == 'T1' && N == 'N1mi' && M == 'M0')) {
-    return 'IB';
+    stage = 'IB';
   }
   else if ((T == 'T0' && N == 'N1' && M == 'M0')
   || (T == 'T1' && N == 'N1' && M == 'M0')
   || (T == 'T2' && N == 'N0' && M == 'M0')) {
-    return 'IIA';
+    stage = 'IIA';
   }
   else if ((T == 'T2' && N == 'N1mi' && M == 'M0')
   || (T == 'T2' && N == 'N1' && M == 'M0')
   || (T == 'T3' && N == 'N0' && M == 'M0')) {
-    return 'IIB';
+    stage = 'IIB';
   }
   else if ((T == 'T0' && N == 'N2' && M == 'M0')
   || (T == 'T1' && N == 'N2' && M == 'M0')
@@ -85,46 +81,55 @@ function anatomical(T, N, M) {
   || (T == 'T3' && N == 'N1mi' && M == 'M0')
   || (T == 'T3' && N == 'N1' && M == 'M0')
   || (T == 'T3' && N == 'N2' && M == 'M0')) {
-    return 'IIIA';
+    stage = 'IIIA';
   }
   else if ((T == 'T4' && N == 'N0' && M == 'M0')
   || (T == 'T4' && N == 'N1mi' && M == 'M0')
   || (T == 'T4' && N == 'N1' && M == 'M0')
   || (T == 'T4' && N == 'N2' && M == 'M0')) {
-    return 'IIIB';
+    stage = 'IIIB';
   }
   else if (N == 'N3' && M == 'M0') {
-    return 'IIIC';
+    stage = 'IIIC';
   }
   else if (M == 'M1') {
-    return 'IV';
+    stage = 'IV';
   }
   else {
-    return 'error';
+    stage = 'error';
   }
+
+  return [func, stage];
 }
 
 // clinical function for staging
 function clinical(T, N, M, G, H2, ER, PR) {
-  if ((T == 'Tis' && N == 'N0' && M == 'M0')
+  var func = 'clinical prognostic';
+  var stage = 'error';
+
+  if (ER == '0' && PR == '0') {
+    [func, stage] = anatomical(T, N, M);
+  }
+  else if ((T == 'Tis' && N == 'N0' && M == 'M0')
   || (T == 'T0' && N == 'N0' && M == 'M0')) {
-    return '0';
+    stage = '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0')
+  || (T == 'Tis' && N == 'N1mi' && M == 'M0')
   || (T == 'T0' && N == 'N1mi' && M == 'M0')
   || (T == 'T1' && N == 'N1mi' && M == 'M0')) {
       if ((G == '1' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '2' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')) {
-        return 'IB';
+      || (G == '3' && H2 == '-' && (ER == '+' || PR == '+'))) {
+        stage = 'IB';
       }
-      else {
-        return 'IA';
+      else if (G != '0') {
+        stage = 'IA';
       }
   }
-  else if ((T == 'T0' && N == 'N1' && M == 'M0')
+  else if ((T == 'Tis' && N == 'N1' && M == 'M0')
+  || (T == 'T0' && N == 'N1' && M == 'M0')
   || (T == 'T1' && N == 'N1' && M == 'M0')
   || (T == 'T2' && N == 'N0' && M == 'M0')) {
       if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
@@ -132,16 +137,15 @@ function clinical(T, N, M, G, H2, ER, PR) {
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IB';
+        stage = 'IB';
       }
       else if ((G == '2' && H2 == '-' && ER == '-' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')
+      || (G == '3' && H2 == '-' && (ER == '+' || PR == '+'))
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIB';
+        stage = 'IIB';
       }
-      else {
-        return 'IIA';
+      else if (G != '0') {
+        stage = 'IIA';
       }
   }
   else if ((T == 'T2' && N == 'N1mi' && M == 'M0')
@@ -150,29 +154,27 @@ function clinical(T, N, M, G, H2, ER, PR) {
       if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IB';
+        stage = 'IB';
       }
-      else if ((G == '1' && H2 == '+' && ER == '+' && PR == '-')
-      || (G == '1' && H2 == '+' && ER == '-' && PR == '+')
+      else if ((G == '1' && H2 == '+' && (ER == '+' || PR == '+'))
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')
-      || (G == '2' && H2 == '+' && ER == '+' && PR == '-')
-      || (G == '2' && H2 == '+' && ER == '-' && PR == '+')
+      || (G == '2' && H2 == '+' && (ER == '+' || PR == '+'))
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IIA';
+        stage = 'IIA';
       }
-      else if ((G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')) {
-        return 'IIIA';
+      else if (G == '3' && H2 == '-' && (ER == '+' || PR == '+')) {
+        stage = 'IIIA';
       }
       else if ((G == '2' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIB';
+        stage = 'IIIB';
       }
-      else {
-        return 'IIB';
+      else if (G != '0') {
+        stage = 'IIB';
       }
   }
-  else if ((T == 'T0' && N == 'N2' && M == 'M0')
+  else if ((T == 'Tis' && N == 'N2' && M == 'M0')
+  || (T == 'T0' && N == 'N2' && M == 'M0')
   || (T == 'T1' && N == 'N2' && M == 'M0')
   || (T == 'T2' && N == 'N2' && M == 'M0')
   || (T == 'T3' && N == 'N1mi' && M == 'M0')
@@ -182,22 +184,21 @@ function clinical(T, N, M, G, H2, ER, PR) {
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IIA';
+        stage = 'IIA';
       }
       else if ((G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IIB';
+        stage = 'IIB';
       }
       else if ((G == '1' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '2' && H2 == '-' && ER == '-' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')) {
-        return 'IIIB';
+      || (G == '3' && H2 == '-' && (ER == '+' || PR == '+'))) {
+        stage = 'IIIB';
       }
       else if ((G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIC';
+        stage = 'IIIC';
       }
-      else {
-        return 'IIIA';
+      else if (G != '0') {
+        stage = 'IIIA';
       }
   }
   else if ((T == 'T4' && N == 'N0' && M == 'M0')
@@ -207,25 +208,27 @@ function clinical(T, N, M, G, H2, ER, PR) {
   || (N == 'N3' && M == 'M0')) {
       if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IIIA';
+        stage = 'IIIA';
       }
       else if ((G == '1' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '2' && H2 == '-' && ER == '-' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')
+      || (G == '3' && H2 == '-' && (ER == '+' || PR == '+'))
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIC';
+        stage = 'IIIC';
       }
-      else {
-        return 'IIIB';
+      else if (G != '0') {
+        stage = 'IIIB';
       }
   }
   else if (M == 'M1') {
-    return 'IV';
+    stage = 'IV';
   }
-  else {
-    return 'error';
+
+  if (stage == 'error') {
+    [func, stage] = anatomical(T, N, M);
   }
+
+  return [func, stage];
 }
 
 /*
@@ -298,46 +301,59 @@ IV
 
 // pathological function for staging
 function pathological(T, N, M, G, H2, ER, PR, Odx) {
-  if ((T == 'Tis' && N == 'N0' && M == 'M0')
+  var func = 'pathological prognostic';
+  var stage = 'error';
+
+  if (ER == '0' && PR == '0') {
+    [func, stage] = anatomical(T, N, M);
+  }
+  else if ((T == 'Tis' && N == 'N0' && M == 'M0')
   || (T == 'T0' && N == 'N0' && M == 'M0')) {
-    return '0';
+    stage = '0';
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0' && H2 == '-' && ER == '+' && Odx == '+')
   || (T == 'T2' && N == 'N0' && M == 'M0' && H2 == '-' && ER == '+' && Odx == '+')) {
-    return 'IA'
+    stage = 'IA'
   }
   else if ((T == 'T1' && N == 'N0' && M == 'M0')
+  || (T == 'Tis' && N == 'N1mi' && M == 'M0')
   || (T == 'T0' && N == 'N1mi' && M == 'M0')
   || (T == 'T1' && N == 'N1mi' && M == 'M0')) {
       if ((G == '2' && H2 == '-' && ER == '-' && PR == '-')
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IB';
+        stage = 'IB';
       }
-      else {
-        return 'IA';
+      else if (H2 == '+' && ER == "+" && PR == "+") {
+        stage = 'IA';
+      }
+      else if (G != '0') {
+        stage = 'IA';
       }
   }
-  else if ((T == 'T0' && N == 'N1' && M == 'M0')
+  else if ((T == 'Tis' && N == 'N1' && M == 'M0')
+  || (T == 'T0' && N == 'N1' && M == 'M0')
   || (T == 'T1' && N == 'N1' && M == 'M0')
   || (T == 'T2' && N == 'N0' && M == 'M0')) {
-      if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
+      if ((T == 'T1' && N == 'N1' && M == 'M0')
+      && H2 == '+' && ER == '+' && PR == '+') {
+        stage = 'IA';
+      }
+      else if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IA';
+        stage = 'IA';
       }
       else if ((G == '1' && H2 == '+' && ER == '+' && PR == '-')
       || (G == '1' && H2 == '+' && ER == '-' && PR == '+')
-      || (G == '1' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '1' && H2 == '-' && ER == '-' && PR == '+')
-      || (G == '2' && H2 == '+' && ER == '+' && PR == '-')
-      || (G == '2' && H2 == '+' && ER == '-' && PR == '+')
+      || (G == '1' && H2 == '-' && (ER == '+' || PR == '+'))
+      || (G == '2' && H2 == '+' && (ER == '+' || PR == '+'))
       || (G == '3' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IB';
+        stage = 'IB';
       }
-      else {
-        return 'IIA';
+      else if (G != '0') {
+        stage = 'IIA';
       }
   }
   else if ((T == 'T2' && N == 'N1mi' && M == 'M0')
@@ -345,24 +361,25 @@ function pathological(T, N, M, G, H2, ER, PR, Odx) {
   || (T == 'T3' && N == 'N0' && M == 'M0')) {
       if ((G == '1' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IA';
+        stage = 'IA';
       }
       else if ((G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IB';
+        stage = 'IB';
       }
       else if ((G == '3' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IIA';
+        stage = 'IIA';
       }
       else if ((G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIA';
+        stage = 'IIIA';
       }
-      else {
-        return 'IIB';
+      else if (G != '0') {
+        stage = 'IIB';
       }
   }
-  else if ((T == 'T0' && N == 'N2' && M == 'M0')
+  else if ((T == 'Tis' && N == 'N2' && M == 'M0')
+  || (T == 'T0' && N == 'N2' && M == 'M0')
   || (T == 'T1' && N == 'N2' && M == 'M0')
   || (T == 'T2' && N == 'N2' && M == 'M0')
   || (T == 'T3' && N == 'N1mi' && M == 'M0')
@@ -372,22 +389,22 @@ function pathological(T, N, M, G, H2, ER, PR, Odx) {
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IB';
+        stage = 'IB';
       }
       else if ((G == '3' && H2 == '+' && ER == '+' && PR == '+')) {
-        return 'IIA';
+        stage = 'IIA';
       }
       else if ((G == '3' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IIB';
+        stage = 'IIB';
       }
       else if ((G == '2' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIB';
+        stage = 'IIIB';
       }
       else if ((G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIC';
+        stage = 'IIIC';
       }
-      else {
-        return 'IIIA';
+      else if (G != '0') {
+        stage = 'IIIA';
       }
   }
   else if ((T == 'T4' && N == 'N0' && M == 'M0')
@@ -399,24 +416,26 @@ function pathological(T, N, M, G, H2, ER, PR, Odx) {
       || (G == '1' && H2 == '-' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '+' && ER == '+' && PR == '+')
       || (G == '2' && H2 == '-' && ER == '+' && PR == '+')) {
-        return 'IIIA';
+        stage = 'IIIA';
       }
       else if ((G == '2' && H2 == '-' && ER == '-' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '+' && PR == '-')
-      || (G == '3' && H2 == '-' && ER == '-' && PR == '+')
+      || (G == '3' && H2 == '-' && (ER == '+' || PR == '+'))
       || (G == '3' && H2 == '-' && ER == '-' && PR == '-')) {
-        return 'IIIC';
+        stage = 'IIIC';
       }
-      else {
-        return 'IIIB';
+      else if (G != '0') {
+        stage = 'IIIB';
       }
   }
   else if (M == 'M1') {
-    return 'IV';
+    stage = 'IV';
   }
-  else {
-    return 'error';
+
+  if (stage == 'error') {
+    [func, stage] = anatomical(T, N, M);
   }
+
+  return [func, stage];
 }
 
 /*
